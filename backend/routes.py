@@ -74,10 +74,10 @@ def update_song(id):
     if not isinstance(song, dict):
         abort(400)
     fields = {key: value for key, value in song.items() if key not in {"_id", "id"}}
-    result = collection.update_one({"id": id}, {"$set": fields})
-    if not result.matched_count:
-        abort(404)
-    return get_song(id)
+    if not fields:
+        abort(400)
+    result = collection.update_one({"id": id}, {"$set": fields}, upsert=True)
+    return get_song(id), 201 if result.upserted_id is not None else 200
 
 
 @app.delete("/song/<int:id>")
