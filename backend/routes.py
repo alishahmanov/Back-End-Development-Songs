@@ -42,7 +42,7 @@ def count():
 
 @app.get("/song")
 def get_songs():
-    return jsonify(list(collection.find({}, {"_id": 0}).sort("id")))
+    return jsonify(songs=list(collection.find({}, {"_id": 0}).sort("id")))
 
 
 @app.get("/song/<int:id>")
